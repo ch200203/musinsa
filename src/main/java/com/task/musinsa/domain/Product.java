@@ -1,14 +1,6 @@
 package com.task.musinsa.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,9 +8,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "products", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"brand_id", "category_id"})
-})
+@Table(name = "products", uniqueConstraints = {@UniqueConstraint(columnNames = {"brand_id", "category"})})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
@@ -27,18 +17,18 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "brand_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "category_id")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Category category;
 
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(name = "price", nullable = false)
+    @Column(nullable = false)
     private BigDecimal price;
 
     private Product(Brand brand, Category category, String name, BigDecimal price) {

@@ -1,35 +1,35 @@
 package com.task.musinsa.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Entity
-@Table(name = "category")
 @Getter
-@ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Category {
+public enum Category {
+    TOP("상의"),
+    OUTER("아우터"),
+    PANTS("바지"),
+    SNEAKERS("스니커즈"),
+    BAG("가방"),
+    HAT("모자"),
+    SOCKS("양말"),
+    ACCESSORY("액세서리");
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final String displayName;
 
-    @Column(nullable = false, unique = true)
-    private String name;
-
-    private Category(String name) {
-        this.name = name;
+    Category(String displayName) {
+        this.displayName = displayName;
     }
 
-    public static Category of(String name) {
-        return new Category(name);
+    public static Category fromDisplayName(String displayName) {
+        return switch (displayName) {
+            case "상의" -> TOP;
+            case "아우터" -> OUTER;
+            case "바지" -> PANTS;
+            case "스니커즈" -> SNEAKERS;
+            case "가방" -> BAG;
+            case "모자" -> HAT;
+            case "양말" -> SOCKS;
+            case "액세서리" -> ACCESSORY;
+            default -> throw new IllegalArgumentException("지원하지 않는 카테고리입니다: " + displayName);
+        };
     }
 }

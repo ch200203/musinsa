@@ -20,7 +20,7 @@ class ProductTest {
     @BeforeEach
     void setUp() {
         brand = Brand.of("무신사");
-        category = Category.of("상의");
+        category = Category.TOP;
         productName = "옥스포드 셔츠";
         price = new BigDecimal(12_000);
     }

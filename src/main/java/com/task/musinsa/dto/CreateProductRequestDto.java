@@ -1,11 +1,13 @@
 package com.task.musinsa.dto;
 
+import com.task.musinsa.domain.Category;
+
+import java.math.BigDecimal;
+
 public record CreateProductRequestDto(
         long brandId,
-        long categoryId,
+        Category category,
         String productName,
-        double price
-
+        BigDecimal price
 ) {
-
 }

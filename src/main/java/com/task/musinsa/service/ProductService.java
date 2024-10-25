@@ -22,41 +22,51 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final BrandRepository brandRepository;
-    private final CategoryRepository categoryRepository;
 
     @Transactional
     public Product createProduct(final CreateProductRequestDto request) {
         Brand brand = brandRepository.findById(request.brandId())
                 .orElseThrow(() -> new NotFoundException("브랜드를 찾을 수 없습니다: " + request.brandId()));
 
-        Category category = categoryRepository.findById(request.categoryId())
-                .orElseThrow(() -> new NotFoundException("카테고리를 찾을 수 없습니다: " + request.categoryId()));
+        Category category = request.category();
+        BigDecimal price = request.price();
 
-        Product product = Product.create(brand, category, request.productName(), BigDecimal.valueOf(request.price()));
+        Product product = Product.create(brand, category, request.productName(), price);
         return productRepository.save(product);
     }
 
     @Transactional
-    public Product updateProduct(Long productId, UpdateProductRequestDto request) {
+    public Product updateProduct(long productId, UpdateProductRequestDto request) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException("상품을 찾을 수 없습니다: " + productId));
 
-        if (request.newName() != null && !request.newName().isBlank()) {
-            product.changeName(request.newName());
-        }
-
-        if (request.newPrice() != null && request.newPrice().compareTo(BigDecimal.ZERO) > 0) {
-            product.changePrice(request.newPrice());
-        }
+        updateProductDetails(product, request);
 
         return product;
     }
 
     @Transactional
-    public void deleteProduct(Long productId) {
+    public void deleteProduct(long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException("상품을 찾을 수 없습니다: " + productId));
 
         productRepository.delete(product);
+    }
+
+    private void updateProductDetails(Product product, UpdateProductRequestDto request) {
+        updateProductName(product, request.newName());
+        updateProductPrice(product, request.newPrice());
+    }
+
+    private void updateProductName(Product product, String newName) {
+        if (newName != null && !newName.isBlank()) {
+            product.changeName(newName);
+        }
+    }
+
+    private void updateProductPrice(Product product, BigDecimal newPrice) {
+        if (newPrice != null && newPrice.compareTo(BigDecimal.ZERO) > 0) {
+            product.changePrice(newPrice);
+        }
     }
 }

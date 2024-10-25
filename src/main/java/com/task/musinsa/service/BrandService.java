@@ -3,6 +3,7 @@ package com.task.musinsa.service;
 import com.task.musinsa.domain.Brand;
 import com.task.musinsa.dto.CreateBrandRequestDto;
 import com.task.musinsa.exception.DuplicateNameException;
+import com.task.musinsa.exception.NotFoundException;
 import com.task.musinsa.repository.BrandRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,4 +28,5 @@ public class BrandService {
             throw new DuplicateNameException("브랜드가 이미 존재합니다: " + name);
         }
     }
+
 }
