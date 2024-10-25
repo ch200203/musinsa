@@ -6,9 +6,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "category")
+@Getter
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 
     @Id
@@ -18,4 +25,11 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
+    private Category(String name) {
+        this.name = name;
+    }
+
+    public static Category of(String name) {
+        return new Category(name);
+    }
 }
