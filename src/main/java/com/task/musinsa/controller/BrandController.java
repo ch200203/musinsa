@@ -23,4 +23,5 @@ public class BrandController {
         var response = brandService.createBrand(createBrandRequestDto);
         return ResponseEntity.ok(null);
     }
+
 }

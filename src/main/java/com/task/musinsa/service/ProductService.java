@@ -7,7 +7,6 @@ import com.task.musinsa.dto.CreateProductRequestDto;
 import com.task.musinsa.dto.UpdateProductRequestDto;
 import com.task.musinsa.exception.NotFoundException;
 import com.task.musinsa.repository.BrandRepository;
-import com.task.musinsa.repository.CategoryRepository;
 import com.task.musinsa.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

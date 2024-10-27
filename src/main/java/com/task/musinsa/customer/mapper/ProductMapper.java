@@ -2,17 +2,23 @@ package com.task.musinsa.customer.mapper;
 
 import com.task.musinsa.customer.dto.ProductPriceResponseDto;
 import com.task.musinsa.domain.Product;
+import com.task.musinsa.dto.CategoryLowestPriceDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface ProductMapper {
 
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
-    ProductPriceResponseDto.CategoryPriceInfo toCategoryPriceInfo(Product product);
+    @Mapping(target = "category", expression = "java(product.getCategory().getDisplayName())")
+    @Mapping(target = "brand", source = "brand.name")
+    @Mapping(target = "price", source = "price")
+    ProductPriceResponseDto.LowestCategoryPrice toLowestCategoryPrice(Product product);
+
+    ProductPriceResponseDto.CategoryPrice toCategoryPrice(CategoryLowestPriceDto categoryLowestPriceDto);
 
 }
+
 

@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "products", uniqueConstraints = {@UniqueConstraint(columnNames = {"brand_id", "category"})})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "products", uniqueConstraints = {@UniqueConstraint(columnNames = {"brand_id", "category"})})
 public class Product {
 
     @Id
@@ -67,5 +67,15 @@ public class Product {
     public void changeName(String newName) {
         validateName(newName);
         this.name = newName;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "brand=" + brand.getName() + ",  " +
+                "category = " + category + ", " +
+                "name = " + name + ", " +
+                "price = " + price + ")";
     }
 }
