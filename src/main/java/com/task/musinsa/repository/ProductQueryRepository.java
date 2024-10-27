@@ -3,6 +3,7 @@ package com.task.musinsa.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.task.musinsa.domain.Category;
 import com.task.musinsa.domain.QProduct;
 import com.task.musinsa.dto.BrandTotalPriceDto;
 import com.task.musinsa.dto.CategoryLowestPriceDto;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.task.musinsa.customer.dto.ProductPriceResponseDto.BrandPrice;
 import static com.task.musinsa.domain.QProduct.product;
 
 @Repository
@@ -70,5 +72,41 @@ public class ProductQueryRepository {
                         )))
                 .groupBy(product.category)
                 .fetch();
+    }
+
+    public BrandPrice findLowestPriceByCategory(Category category) {
+        QProduct productSub = new QProduct("productSub");
+        return queryFactory
+                .select(Projections.constructor(
+                        BrandPrice.class,
+                        product.brand.name,
+                        product.price
+                ))
+                .from(product)
+                .where(product.category.eq(category)
+                        .and(product.price.eq(
+                                JPAExpressions.select(productSub.price.min())
+                                        .from(productSub)
+                                        .where(productSub.category.eq(category))
+                        )))
+                .fetchOne();
+    }
+
+    public BrandPrice findHighestPriceByCategory(Category category) {
+        QProduct productSub = new QProduct("productSub");
+        return queryFactory
+                .select(Projections.constructor(
+                        BrandPrice.class,
+                        product.brand.name,
+                        product.price
+                ))
+                .from(product)
+                .where(product.category.eq(category)
+                        .and(product.price.eq(
+                                JPAExpressions.select(productSub.price.max())
+                                        .from(productSub)
+                                        .where(productSub.category.eq(category))
+                        )))
+                .fetchOne();
     }
 }

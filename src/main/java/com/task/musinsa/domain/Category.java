@@ -1,5 +1,6 @@
 package com.task.musinsa.domain;
 
+import com.task.musinsa.exception.InvalidCategoryException;
 import lombok.Getter;
 
 @Getter
@@ -29,7 +30,7 @@ public enum Category {
             case "모자" -> HAT;
             case "양말" -> SOCKS;
             case "액세서리" -> ACCESSORY;
-            default -> throw new IllegalArgumentException("지원하지 않는 카테고리입니다: " + displayName);
+            default -> throw new InvalidCategoryException(displayName);
         };
     }
 }

@@ -2,9 +2,11 @@ package com.task.musinsa.customer.controller;
 
 import com.task.musinsa.customer.dto.ProductPriceResponseDto;
 import com.task.musinsa.customer.service.CustomerProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,5 +28,11 @@ public class CustomerProductController {
     public ResponseEntity<ProductPriceResponseDto.BrandCategoryPrice> getLowestPriceByBrand() {
         var result = customerProductService.findLowestPriceByBrand();
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/price-info/{categoryName}")
+    public ResponseEntity<ProductPriceResponseDto.CategoryPriceRangeDto> getCategoryPriceRange(@PathVariable String categoryName) {
+        var priceRangeInfo = customerProductService.findPriceRangeCategory(categoryName);
+        return ResponseEntity.ok(priceRangeInfo);
     }
 }

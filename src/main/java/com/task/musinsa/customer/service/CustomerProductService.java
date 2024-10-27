@@ -133,4 +133,20 @@ public class CustomerProductService {
                 .count();
         return categoryCount == Category.values().length;
     }
+
+    public ProductPriceResponseDto.CategoryPriceRangeDto findPriceRangeCategory(String categoryName) {
+        Category category = Category.fromDisplayName(categoryName);
+
+        // 1. 카테고리 별 최저가 브랜드 조회
+        var lowestPriceByCategory = productQueryRepository.findLowestPriceByCategory(category);
+
+        // 2. 최고가 브랜드 조회
+        var highestPriceByCategory = productQueryRepository.findHighestPriceByCategory(category);
+
+        // 3. dto 변환
+        var lowestPrices = List.of(lowestPriceByCategory);
+        var highestPrices = List.of(highestPriceByCategory);
+
+        return new ProductPriceResponseDto.CategoryPriceRangeDto(category.getDisplayName(), lowestPrices, highestPrices);
+    }
 }
