@@ -61,11 +61,13 @@ public class ProductPriceResponseDto {
             String category,
             List<BrandPrice> lowestPrices,
             List<BrandPrice> highestPrices
-    ) {}
+    ) {
+    }
 
     public record BrandPrice(
             String brand,
             @JsonSerialize(using = MoneyFormatSerializer.class)
             BigDecimal price
-    ){}
+    ) {
+    }
 }

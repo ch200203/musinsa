@@ -6,9 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import java.util.List;
-
-import static com.task.musinsa.customer.dto.ProductPriceResponseDto.*;
+import static com.task.musinsa.customer.dto.ProductPriceResponseDto.CategoryPrice;
+import static com.task.musinsa.customer.dto.ProductPriceResponseDto.LowestCategoryPrice;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {

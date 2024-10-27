@@ -69,8 +69,6 @@ public class CustomerProductService {
 
     /**
      * 총 가격 계산
-     *
-     * @param lowestPriceProducts
      */
     private BigDecimal calculateTotalPrice(Map<String, Product> lowestPriceProducts) {
         return lowestPriceProducts.values().stream()
@@ -90,8 +88,6 @@ public class CustomerProductService {
      * 브랜드의 카테고리별 최저가
      */
     public ProductPriceResponseDto.BrandCategoryPrice findLowestPriceByBrand() {
-        List<Product> products = productRepository.findAll();
-
         // 1. 브랜드들의 카테고리별 최저가 상품 목록 조회
         var lowestPriceByBrand = productQueryRepository.findLowestPriceByBrand()
                 .orElseThrow(() -> new IllegalArgumentException("최저가 브랜드를 찾을 수 없습니다."));

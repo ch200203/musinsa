@@ -1,4 +1,4 @@
-package com.task.musinsa.controller;
+package com.task.musinsa.controller.admin;
 
 import com.task.musinsa.service.ProductService;
 import lombok.RequiredArgsConstructor;

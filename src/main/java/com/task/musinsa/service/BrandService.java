@@ -3,7 +3,6 @@ package com.task.musinsa.service;
 import com.task.musinsa.domain.Brand;
 import com.task.musinsa.dto.CreateBrandRequestDto;
 import com.task.musinsa.exception.DuplicateNameException;
-import com.task.musinsa.exception.NotFoundException;
 import com.task.musinsa.repository.BrandRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,10 +16,10 @@ public class BrandService {
     private final BrandRepository brandRepository;
 
     @Transactional
-    public Brand createBrand(CreateBrandRequestDto createBrandRequestDto) {
+    public String createBrand(CreateBrandRequestDto createBrandRequestDto) {
         validateBrandName(createBrandRequestDto.brandName());
         Brand brand = Brand.of(createBrandRequestDto.brandName());
-        return brandRepository.save(brand);
+        return brandRepository.save(brand).getName();
     }
 
     private void validateBrandName(String name) {

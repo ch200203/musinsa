@@ -1,4 +1,4 @@
-package com.task.musinsa.controller;
+package com.task.musinsa.controller.admin;
 
 import com.task.musinsa.dto.CreateBrandRequestDto;
 import com.task.musinsa.service.BrandService;
@@ -17,11 +17,10 @@ public class BrandController {
 
     private final BrandService brandService;
 
-    // 새로운 브랜드를 추가할 수 있다
     @PostMapping
-    public ResponseEntity<?> createBrand(@Valid @RequestBody CreateBrandRequestDto createBrandRequestDto) {
+    public ResponseEntity<String> createBrand(@Valid @RequestBody CreateBrandRequestDto createBrandRequestDto) {
         var response = brandService.createBrand(createBrandRequestDto);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(response);
     }
 
 }
