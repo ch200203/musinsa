@@ -79,7 +79,7 @@ class CustomerProductServiceTest {
     }
 
     @Test
-    void 카테고리별_최저가_최고가_조회_성공() {
+    void 카테고리별_최저가_최고가_조회() {
         String categoryName = "상의";
         Category category = Category.fromDisplayName(categoryName);
 

@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.task.musinsa.customer.dto.ProductPriceResponseDto.*;
 import static com.task.musinsa.customer.dto.ProductPriceResponseDto.TotalPriceResponse;
 
 @Service
@@ -80,14 +81,14 @@ public class CustomerProductService {
     /**
      * 카테고리에 해당하는 브랜드가 없는 기본 CategoryPriceInfo 생성
      */
-    private ProductPriceResponseDto.LowestCategoryPrice defaultCategoryPriceInfo(String category) {
-        return new ProductPriceResponseDto.LowestCategoryPrice(category, "", BigDecimal.ZERO);
+    private LowestCategoryPrice defaultCategoryPriceInfo(String category) {
+        return new LowestCategoryPrice(category, "", BigDecimal.ZERO);
     }
 
     /**
      * 브랜드의 카테고리별 최저가
      */
-    public ProductPriceResponseDto.BrandCategoryPrice findLowestPriceByBrand() {
+    public BrandCategoryPrice findLowestPriceByBrand() {
         // 1. 브랜드들의 카테고리별 최저가 상품 목록 조회
         var lowestPriceByBrand = productQueryRepository.findLowestPriceByBrand()
                 .orElseThrow(() -> new IllegalArgumentException("최저가 브랜드를 찾을 수 없습니다."));
@@ -105,7 +106,7 @@ public class CustomerProductService {
                 .map(productMapper::toCategoryPrice)
                 .toList();
 
-        return new ProductPriceResponseDto.BrandCategoryPrice(
+        return new BrandCategoryPrice(
                 lowestPriceByBrand.brandName(),
                 categoryPrices,
                 lowestPriceByBrand.totalPrice()
@@ -130,7 +131,7 @@ public class CustomerProductService {
         return categoryCount == Category.values().length;
     }
 
-    public ProductPriceResponseDto.CategoryPriceRangeDto findPriceRangeCategory(String categoryName) {
+    public CategoryPriceRangeDto findPriceRangeCategory(String categoryName) {
         Category category = Category.fromDisplayName(categoryName);
 
         // 1. 카테고리 별 최저가 브랜드 조회
@@ -143,6 +144,6 @@ public class CustomerProductService {
         var lowestPrices = List.of(lowestPriceByCategory);
         var highestPrices = List.of(highestPriceByCategory);
 
-        return new ProductPriceResponseDto.CategoryPriceRangeDto(category.getDisplayName(), lowestPrices, highestPrices);
+        return new CategoryPriceRangeDto(category.getDisplayName(), lowestPrices, highestPrices);
     }
 }

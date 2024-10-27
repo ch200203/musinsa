@@ -16,10 +16,10 @@ public class BrandService {
     private final BrandRepository brandRepository;
 
     @Transactional
-    public String createBrand(CreateBrandRequestDto createBrandRequestDto) {
+    public Brand createBrand(CreateBrandRequestDto createBrandRequestDto) {
         validateBrandName(createBrandRequestDto.brandName());
         Brand brand = Brand.of(createBrandRequestDto.brandName());
-        return brandRepository.save(brand).getName();
+        return brandRepository.save(brand);
     }
 
     private void validateBrandName(String name) {

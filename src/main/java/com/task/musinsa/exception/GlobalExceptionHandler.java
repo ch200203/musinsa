@@ -1,8 +1,5 @@
 package com.task.musinsa.exception;
 
-import com.task.musinsa.common.CustomErrorResponse;
-import com.task.musinsa.common.ErrorCode;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

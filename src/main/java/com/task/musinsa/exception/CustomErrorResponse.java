@@ -1,4 +1,4 @@
-package com.task.musinsa.common;
+package com.task.musinsa.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

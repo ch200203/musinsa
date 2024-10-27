@@ -1,6 +1,5 @@
 package com.task.musinsa.exception;
 
-import com.task.musinsa.common.ErrorCode;
 import lombok.Getter;
 
 @Getter
