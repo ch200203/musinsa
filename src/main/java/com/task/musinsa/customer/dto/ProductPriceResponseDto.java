@@ -57,4 +57,10 @@ public class ProductPriceResponseDto {
     ) {
     }
 
+    public record BrandPrice(
+            String brand,
+            @JsonSerialize(using = MoneyFormatSerializer.class)
+            BigDecimal price
+    )
+
 }

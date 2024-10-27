@@ -22,6 +22,7 @@ import static com.task.musinsa.customer.dto.ProductPriceResponseDto.TotalPriceRe
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CustomerProductService {
 
     private final ProductQueryRepository productQueryRepository;
@@ -31,7 +32,6 @@ public class CustomerProductService {
     /**
      * 카테고리별 최저가와 총액을 찾아 반환
      */
-    @Transactional
     public TotalPriceResponse findLowestPriceByCategory() {
         List<Product> products = productRepository.findAll();
 
