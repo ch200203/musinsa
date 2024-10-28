@@ -2,6 +2,7 @@ package com.task.musinsa.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.task.musinsa.common.MoneyFormatSerializer;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,6 +26,7 @@ public class ProductPriceResponseDto {
     /**
      * 카테고리별 최저가 상품과 총액 정보
      */
+    @Builder
     public record TotalPriceResponse(
             List<LowestCategoryPrice> lowestPrices,
             @JsonSerialize(using = MoneyFormatSerializer.class)
@@ -39,6 +41,7 @@ public class ProductPriceResponseDto {
      * @param lowestCategoryPrices
      * @param totalPrice
      */
+    @Builder
     public record BrandCategoryPrice(
             String brand,
             List<CategoryPrice> lowestCategoryPrices,
@@ -60,6 +63,7 @@ public class ProductPriceResponseDto {
     ) {
     }
 
+    @Builder
     public record CategoryPriceRangeDto(
             String category,
             List<BrandPrice> lowestPrices,

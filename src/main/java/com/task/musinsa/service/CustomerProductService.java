@@ -1,5 +1,8 @@
 package com.task.musinsa.service;
 
+import com.task.musinsa.exception.CustomException;
+import com.task.musinsa.exception.ErrorCode;
+import com.task.musinsa.exception.MissingCategoryPricesException;
 import com.task.musinsa.mapper.ProductMapper;
 import com.task.musinsa.domain.Category;
 import com.task.musinsa.domain.Product;
@@ -50,7 +53,10 @@ public class CustomerProductService {
                 })
                 .toList();
 
-        return new TotalPriceResponse(lowestPrices, totalPrice);
+        return TotalPriceResponse.builder()
+                .lowestPrices(lowestPrices)
+                .totalPrice(totalPrice)
+                .build();
     }
 
     /**
@@ -88,46 +94,38 @@ public class CustomerProductService {
      * 브랜드의 카테고리별 최저가
      */
     public BrandCategoryPrice findLowestPriceByBrand() {
-        // 1. 브랜드들의 카테고리별 최저가 상품 목록 조회
+        // 1. 카테고리별 합계 최저가 브랜드 조회
         var lowestPriceByBrand = productQueryRepository.findLowestPriceByBrand()
-                .orElseThrow(() -> new IllegalArgumentException("최저가 브랜드를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.BRAND_NOT_FOUND));
 
         // 2. 카테고리별 최저가 상품 조회
         var lowestProductsByBrand = productQueryRepository.findLowestProductByBrand(lowestPriceByBrand.brandId());
 
         // 3. 카테고리별 상품이 모두 있는지 확인
-        if (!hasAllCategories(lowestProductsByBrand)) {
-            throw new IllegalArgumentException("해당 브랜드에서 모든 카테고리의 최저가 상품을 찾을 수 없습니다.");
-        }
+        validAllCategories(lowestProductsByBrand);
 
         // 4. 카테고리별 최저가 상품을 DTO로 변환하여 응답 생성
         var categoryPrices = lowestProductsByBrand.stream()
                 .map(productMapper::toCategoryPrice)
                 .toList();
 
-        return new BrandCategoryPrice(
-                lowestPriceByBrand.brandName(),
-                categoryPrices,
-                lowestPriceByBrand.totalPrice()
-        );
-    }
-
-    private Map<String, List<Product>> getBrandCategoryPrices(List<Product> products) {
-        return products.stream()
-                .collect(Collectors.groupingBy(
-                        product -> product.getBrand().getName()
-                ));
+        return BrandCategoryPrice.builder()
+                .brand(lowestPriceByBrand.brandName())
+                .lowestCategoryPrices(categoryPrices)
+                .totalPrice(lowestPriceByBrand.totalPrice())
+                .build();
     }
 
     /**
      * 모든 카테고리가 있는지 확인하는 메서드
      */
-    private boolean hasAllCategories(List<CategoryLowestPriceDto> products) {
-        long categoryCount = products.stream()
+    private void validAllCategories(List<CategoryLowestPriceDto> products) {
+        if (products.isEmpty() || products.stream()
                 .map(CategoryLowestPriceDto::category)
                 .distinct()
-                .count();
-        return categoryCount == Category.values().length;
+                .count() < Category.values().length) {
+            throw new MissingCategoryPricesException();
+        }
     }
 
     public CategoryPriceRangeDto findPriceRangeCategory(String categoryName) {
@@ -143,6 +141,10 @@ public class CustomerProductService {
         var lowestPrices = List.of(lowestPriceByCategory);
         var highestPrices = List.of(highestPriceByCategory);
 
-        return new CategoryPriceRangeDto(category.getDisplayName(), lowestPrices, highestPrices);
+        return CategoryPriceRangeDto.builder()
+                .category(category.getDisplayName())
+                .lowestPrices(lowestPrices)
+                .highestPrices(highestPrices)
+                .build();
     }
 }

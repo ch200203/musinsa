@@ -14,6 +14,12 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(MissingCategoryPricesException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMissingCategoryPricesException(MissingCategoryPricesException ex) {
+        var errorResponse = ApiResponse.fail(ErrorCode.MISSING_CATEGORY_PRICES);
+        return ResponseEntity.status(ErrorCode.MISSING_CATEGORY_PRICES.getStatus()).body(errorResponse);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();

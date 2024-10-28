@@ -47,11 +47,15 @@ public class ProductQueryRepository {
                         ))
                         .groupBy(product.brand)
                         .orderBy(product.price.sum().asc())
+                        .orderBy(product.brand.name.asc())
                         .limit(1)
                         .fetchOne()
         );
     }
 
+    /**
+     * 브랜드의 카테고리별 최저가 상품 조회
+     */
     public List<CategoryLowestPriceDto> findLowestProductByBrand(Long brandId) {
         QProduct productSub = new QProduct("productSub");
         return queryFactory
