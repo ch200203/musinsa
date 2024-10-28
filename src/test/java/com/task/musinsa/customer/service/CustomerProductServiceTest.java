@@ -9,6 +9,7 @@ import com.task.musinsa.dto.ProductPriceResponseDto;
 import com.task.musinsa.exception.CustomException;
 import com.task.musinsa.exception.ErrorCode;
 import com.task.musinsa.exception.InvalidCategoryException;
+import com.task.musinsa.exception.MissingCategoryPricesException;
 import com.task.musinsa.mapper.ProductMapper;
 import com.task.musinsa.repository.ProductQueryRepository;
 import com.task.musinsa.repository.ProductRepository;
@@ -147,8 +148,8 @@ class CustomerProductServiceTest {
 
             // when & then
             assertThatThrownBy(() -> productService.findLowestPriceByBrand())
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("해당 브랜드에서 모든 카테고리의 최저가 상품을 찾을 수 없습니다.");
+                    .isInstanceOf(MissingCategoryPricesException.class)
+                    .hasMessageContaining(ErrorCode.MISSING_CATEGORY_PRICES.getMessage());
         }
 
         @Test
