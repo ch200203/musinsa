@@ -8,6 +8,7 @@ import com.task.musinsa.repository.ProductQueryRepository;
 import com.task.musinsa.repository.ProductRepository;
 import com.task.musinsa.service.CustomerProductService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +22,7 @@ import java.util.List;
 import static com.task.musinsa.dto.ProductPriceResponseDto.BrandPrice;
 import static com.task.musinsa.dto.ProductPriceResponseDto.LowestCategoryPrice;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -43,40 +45,80 @@ class CustomerProductServiceTest {
     private Product product1;
     private Product product2;
 
-
     @BeforeEach
-    void setUp() {
+    void init() {
         brand = Brand.of("무신사 스탠다드");
-
-        product1 = Product.create(brand, Category.OUTER, "미니멀자켓_블랙", BigDecimal.valueOf(75_000));
-        product2 = Product.create(brand, Category.TOP, "옥스포드셔츠_화이트", BigDecimal.valueOf(15_000));
-        lenient().when(productRepository.findAll()).thenReturn(List.of(product1, product2));
-        lenient().when(productMapper.toLowestCategoryPrice(product1)).thenReturn(new LowestCategoryPrice("아우터", "무신사 스탠다드", BigDecimal.valueOf(75_000)));
-        lenient().when(productMapper.toLowestCategoryPrice(product2)).thenReturn(new LowestCategoryPrice("상의", "무신사 스탠다드", BigDecimal.valueOf(15_000)));
+        product1 = Product.create(brand, Category.OUTER, "미니멀자켓_블랙", BigDecimal.valueOf(75000));
+        product2 = Product.create(brand, Category.TOP, "옥스포드셔츠_화이트", BigDecimal.valueOf(15000));
     }
 
-    @Test
-    void 카테고리_별로_최저가격인_브랜드와_가격을_조회하고_총액을_반환한다() {
-        // when
-        var response = productService.findLowestPriceByCategory();
+    @Nested
+    class 카테고리_별_최저가격_브랜드와_가격을_조회_및_총액_확인 {
+        @BeforeEach
+        void setUp() {
+            when(productRepository.findAll()).thenReturn(List.of(product1, product2));
+            when(productMapper.toLowestCategoryPrice(any())).thenAnswer(it -> {
+                Product product = it.getArgument(0);
+                return new LowestCategoryPrice(
+                        product.getCategory().getDisplayName(),
+                        product.getBrand().getName(),
+                        product.getPrice()
+                );
+            });
+        }
+
+        @Test
+        void 카테고리_별로_최저가격인_브랜드와_가격을_조회하고_총액을_반환한다() {
+            // when
+            var response = productService.findLowestPriceByCategory();
+
+            // then
+            assertSoftly(softly -> {
+                softly.assertThat(response.lowestPrices()).hasSize(2); // 아우터, 상의
+                // 1. 아우터
+                softly.assertThat(response.lowestPrices().get(0).category()).isEqualTo(Category.OUTER.getDisplayName());
+                softly.assertThat(response.lowestPrices().get(0).brand()).isEqualTo("무신사 스탠다드");
+                softly.assertThat(response.lowestPrices().get(0).price()).isEqualByComparingTo(BigDecimal.valueOf(75_000));
+
+                // 2. 상의
+                softly.assertThat(response.lowestPrices().get(1).category()).isEqualTo(Category.TOP.getDisplayName());
+                softly.assertThat(response.lowestPrices().get(1).brand()).isEqualTo("무신사 스탠다드");
+                softly.assertThat(response.lowestPrices().get(1).price()).isEqualByComparingTo(BigDecimal.valueOf(15_000));
+
+                // 3. 총액
+                softly.assertThat(response.totalPrice()).isEqualByComparingTo(BigDecimal.valueOf(90_000));
+            });
+        }
 
 
-        // then
-        assertSoftly(softly -> {
-            softly.assertThat(response.lowestPrices()).hasSize(2); // 아우터, 상의
-            // 1. 아우터
-            softly.assertThat(response.lowestPrices().get(0).category()).isEqualTo(Category.OUTER.getDisplayName());
-            softly.assertThat(response.lowestPrices().get(0).brand()).isEqualTo("무신사 스탠다드");
-            softly.assertThat(response.lowestPrices().get(0).price()).isEqualByComparingTo(BigDecimal.valueOf(75_000));
 
-            // 2. 상의
-            softly.assertThat(response.lowestPrices().get(1).category()).isEqualTo(Category.TOP.getDisplayName());
-            softly.assertThat(response.lowestPrices().get(1).brand()).isEqualTo("무신사 스탠다드");
-            softly.assertThat(response.lowestPrices().get(1).price()).isEqualByComparingTo(BigDecimal.valueOf(15_000));
+        @Nested
+        class 단일_브랜드로_전체_카테고리_상품을_구매_시_최저가격_브랜드와_총액_확인 {
+            private Category category;
+            private BrandPrice lowestPrices;
+            private BrandPrice highestPrices;
 
-            // 3. 총액
-            softly.assertThat(response.totalPrice()).isEqualByComparingTo(BigDecimal.valueOf(90_000));
-        });
+            @BeforeEach
+            void setUp() {
+                category = Category.TOP;
+                lowestPrices = new BrandPrice(brand.getName(), product1.getPrice());
+                highestPrices = new BrandPrice(brand.getName(), product2.getPrice());
+                when(productQueryRepository.findLowestPriceByCategory(category)).thenReturn(lowestPrices);
+                when(productQueryRepository.findHighestPriceByCategory(category)).thenReturn(highestPrices);
+            }
+        }
+
+
+//    @BeforeEach
+//    void setUp() {
+//        brand = Brand.of("무신사 스탠다드");
+//
+//        product1 = Product.create(brand, Category.OUTER, "미니멀자켓_블랙", BigDecimal.valueOf(75_000));
+//        product2 = Product.create(brand, Category.TOP, "옥스포드셔츠_화이트", BigDecimal.valueOf(15_000));
+//        lenient().when(productRepository.findAll()).thenReturn(List.of(product1, product2));
+//        lenient().when(productMapper.toLowestCategoryPrice(product1)).thenReturn(new LowestCategoryPrice("아우터", "무신사 스탠다드", BigDecimal.valueOf(75_000)));
+//        lenient().when(productMapper.toLowestCategoryPrice(product2)).thenReturn(new LowestCategoryPrice("상의", "무신사 스탠다드", BigDecimal.valueOf(15_000)));
+//    }
     }
 
     @Test
@@ -103,4 +145,5 @@ class CustomerProductServiceTest {
             softly.assertThat(result.highestPrices()).isEqualTo(highestPricesDto);
         });
     }
+
 }
