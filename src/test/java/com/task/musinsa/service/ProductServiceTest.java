@@ -70,4 +70,14 @@ class ProductServiceTest {
             softly.assertThat(result.id()).isEqualTo(1L);
         });
     }
+
+    @Test
+    void 상품_변경에_성공한다() {
+
+    }
+
+    @Test
+    void 상품_삭제에_성공한다() {
+
+    }
 }

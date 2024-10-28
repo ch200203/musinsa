@@ -24,7 +24,7 @@ public class ProductService {
     private final BrandRepository brandRepository;
 
     @Transactional
-    public ProductResponseDto createProduct(final CreateProductRequestDto request) {
+    public ProductResponseDto createProduct(CreateProductRequestDto request) {
         Brand brand = brandRepository.findById(request.brandId())
                 .orElseThrow(() -> new CustomException(ErrorCode.BRAND_NOT_FOUND));
 

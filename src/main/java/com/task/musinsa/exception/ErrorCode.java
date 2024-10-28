@@ -14,7 +14,8 @@ public enum ErrorCode {
 
     INTERNAL_SERVER_ERROR("서버 오류입니다.", 500),
     DUPLICATE_NAME("중복된 이름이 있습니다.", 409),
-    INVALID_CATEGORY("잘못된 카테고리 값입니다.", 400);
+    INVALID_CATEGORY("잘못된 카테고리 값입니다.", 400),
+    INVALID_INPUT_VALUE("잘못된 요청 값이 전달되었습니다.", 400);
 
     private final String message;
     private final int status;
