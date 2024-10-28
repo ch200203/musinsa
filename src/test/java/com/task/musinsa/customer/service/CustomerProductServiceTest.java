@@ -1,6 +1,6 @@
 package com.task.musinsa.customer.service;
 
-import com.task.musinsa.customer.mapper.ProductMapper;
+import com.task.musinsa.mapper.ProductMapper;
 import com.task.musinsa.domain.Brand;
 import com.task.musinsa.domain.Category;
 import com.task.musinsa.domain.Product;
@@ -17,8 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.task.musinsa.customer.dto.ProductPriceResponseDto.BrandPrice;
-import static com.task.musinsa.customer.dto.ProductPriceResponseDto.LowestCategoryPrice;
+import static com.task.musinsa.dto.ProductPriceResponseDto.BrandPrice;
+import static com.task.musinsa.dto.ProductPriceResponseDto.LowestCategoryPrice;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;

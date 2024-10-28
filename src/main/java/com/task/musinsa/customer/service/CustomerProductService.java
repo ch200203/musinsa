@@ -1,7 +1,6 @@
 package com.task.musinsa.customer.service;
 
-import com.task.musinsa.customer.dto.ProductPriceResponseDto;
-import com.task.musinsa.customer.mapper.ProductMapper;
+import com.task.musinsa.mapper.ProductMapper;
 import com.task.musinsa.domain.Category;
 import com.task.musinsa.domain.Product;
 import com.task.musinsa.dto.CategoryLowestPriceDto;
@@ -18,8 +17,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.task.musinsa.customer.dto.ProductPriceResponseDto.*;
-import static com.task.musinsa.customer.dto.ProductPriceResponseDto.TotalPriceResponse;
+import static com.task.musinsa.dto.ProductPriceResponseDto.*;
+import static com.task.musinsa.dto.ProductPriceResponseDto.TotalPriceResponse;
 
 @Service
 @RequiredArgsConstructor

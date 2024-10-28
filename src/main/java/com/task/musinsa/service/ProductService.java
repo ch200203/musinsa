@@ -5,6 +5,8 @@ import com.task.musinsa.domain.Category;
 import com.task.musinsa.domain.Product;
 import com.task.musinsa.dto.CreateProductRequestDto;
 import com.task.musinsa.dto.UpdateProductRequestDto;
+import com.task.musinsa.exception.CustomException;
+import com.task.musinsa.exception.ErrorCode;
 import com.task.musinsa.exception.NotFoundException;
 import com.task.musinsa.repository.BrandRepository;
 import com.task.musinsa.repository.ProductRepository;
@@ -25,7 +27,7 @@ public class ProductService {
     @Transactional
     public Product createProduct(final CreateProductRequestDto request) {
         Brand brand = brandRepository.findById(request.brandId())
-                .orElseThrow(() -> new NotFoundException("브랜드를 찾을 수 없습니다: " + request.brandId()));
+                .orElseThrow(() -> new CustomException(ErrorCode.BRAND_NOT_FOUND));
 
         Category category = request.category();
         BigDecimal price = request.price();
@@ -37,7 +39,7 @@ public class ProductService {
     @Transactional
     public Product updateProduct(long productId, UpdateProductRequestDto request) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new NotFoundException("상품을 찾을 수 없습니다: " + productId));
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
         updateProductDetails(product, request);
 

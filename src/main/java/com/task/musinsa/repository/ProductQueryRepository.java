@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.task.musinsa.customer.dto.ProductPriceResponseDto.BrandPrice;
+import static com.task.musinsa.dto.ProductPriceResponseDto.BrandPrice;
 import static com.task.musinsa.domain.QProduct.product;
 
 @Repository

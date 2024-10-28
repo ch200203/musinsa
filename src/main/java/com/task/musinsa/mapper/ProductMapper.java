@@ -1,4 +1,4 @@
-package com.task.musinsa.customer.mapper;
+package com.task.musinsa.mapper;
 
 import com.task.musinsa.domain.Product;
 import com.task.musinsa.dto.CategoryLowestPriceDto;
@@ -6,8 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import static com.task.musinsa.customer.dto.ProductPriceResponseDto.CategoryPrice;
-import static com.task.musinsa.customer.dto.ProductPriceResponseDto.LowestCategoryPrice;
+import static com.task.musinsa.dto.ProductPriceResponseDto.CategoryPrice;
+import static com.task.musinsa.dto.ProductPriceResponseDto.LowestCategoryPrice;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {

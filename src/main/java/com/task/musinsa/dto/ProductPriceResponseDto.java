@@ -1,4 +1,4 @@
-package com.task.musinsa.customer.dto;
+package com.task.musinsa.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.task.musinsa.common.MoneyFormatSerializer;
