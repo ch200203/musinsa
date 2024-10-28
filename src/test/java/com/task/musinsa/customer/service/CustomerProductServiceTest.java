@@ -6,6 +6,7 @@ import com.task.musinsa.domain.Category;
 import com.task.musinsa.domain.Product;
 import com.task.musinsa.repository.ProductQueryRepository;
 import com.task.musinsa.repository.ProductRepository;
+import com.task.musinsa.service.CustomerProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

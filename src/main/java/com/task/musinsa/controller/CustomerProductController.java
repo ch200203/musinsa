@@ -1,6 +1,6 @@
-package com.task.musinsa.customer.controller;
+package com.task.musinsa.controller;
 
-import com.task.musinsa.customer.service.CustomerProductService;
+import com.task.musinsa.service.CustomerProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

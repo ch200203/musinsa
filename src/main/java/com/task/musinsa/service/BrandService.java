@@ -1,6 +1,7 @@
 package com.task.musinsa.service;
 
 import com.task.musinsa.domain.Brand;
+import com.task.musinsa.dto.BrandResponseDto;
 import com.task.musinsa.dto.CreateBrandRequestDto;
 import com.task.musinsa.exception.DuplicateNameException;
 import com.task.musinsa.repository.BrandRepository;
@@ -16,10 +17,12 @@ public class BrandService {
     private final BrandRepository brandRepository;
 
     @Transactional
-    public Brand createBrand(CreateBrandRequestDto createBrandRequestDto) {
+    public BrandResponseDto createBrand(CreateBrandRequestDto createBrandRequestDto) {
         validateBrandName(createBrandRequestDto.brandName());
         Brand brand = Brand.of(createBrandRequestDto.brandName());
-        return brandRepository.save(brand);
+        return BrandResponseDto.builder()
+                .id(brandRepository.save(brand).getId())
+                .build();
     }
 
     private void validateBrandName(String name) {

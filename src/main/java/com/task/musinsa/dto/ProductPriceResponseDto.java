@@ -6,6 +6,9 @@ import com.task.musinsa.common.MoneyFormatSerializer;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * 고객에게 반환되는 상품정보 Dto
+ */
 public class ProductPriceResponseDto {
 
     /**

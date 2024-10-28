@@ -1,25 +1,26 @@
 package com.task.musinsa.common;
 
-import com.task.musinsa.exception.CustomErrorResponse;
+import com.task.musinsa.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
 public class ApiResponse<T> {
-    private final boolean success;
-    private final T data;
-    private final CustomErrorResponse error;
+    private int statusCode;
+    private String message;
+    private T data;
 
-    public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>(true, data, null);
+    public static <T> ApiResponse<T> success(int statusCode, String message, T data) {
+        return new ApiResponse<>(statusCode, message, data);
     }
 
-    public static ApiResponse<Void> success() {
-        return new ApiResponse<>(true, null, null);
+    // 반환해줄 데이터가 없는 경우
+    public static <T> ApiResponse<T> success(int statusCode, String message) {
+        return new ApiResponse<>(statusCode, message, null);
     }
 
-    public static <T> ApiResponse<T> fail(CustomErrorResponse error) {
-        return new ApiResponse<>(false, null, error);
+    public static ApiResponse<Void> fail(ErrorCode errorCode) {
+        return new ApiResponse<>(errorCode.getStatus(), errorCode.getMessage(), null);
     }
 }

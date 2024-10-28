@@ -4,6 +4,7 @@ import com.task.musinsa.domain.Brand;
 import com.task.musinsa.domain.Category;
 import com.task.musinsa.domain.Product;
 import com.task.musinsa.dto.CreateProductRequestDto;
+import com.task.musinsa.dto.ProductResponseDto;
 import com.task.musinsa.repository.BrandRepository;
 import com.task.musinsa.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,16 +62,12 @@ class ProductServiceTest {
         });
 
         // when
-        Product createdProduct = productService.createProduct(createRequest);
+        ProductResponseDto result = productService.createProduct(createRequest);
 
         // then
         assertSoftly(softly -> {
-            softly.assertThat(createdProduct).isNotNull();
-            softly.assertThat(createdProduct.getId()).isEqualTo(1L);
-            softly.assertThat(createdProduct.getBrand()).isEqualTo(brand);
-            softly.assertThat(createdProduct.getCategory()).isEqualTo(category);
-            softly.assertThat(createdProduct.getName()).isEqualTo("옥스포드 셔츠");
-            softly.assertThat(createdProduct.getPrice()).isEqualByComparingTo(new BigDecimal("12000"));
+            softly.assertThat(result).isNotNull();
+            softly.assertThat(result.id()).isEqualTo(1L);
         });
     }
 }

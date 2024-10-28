@@ -1,4 +1,4 @@
-package com.task.musinsa.customer.service;
+package com.task.musinsa.service;
 
 import com.task.musinsa.mapper.ProductMapper;
 import com.task.musinsa.domain.Category;

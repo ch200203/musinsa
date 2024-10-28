@@ -40,13 +40,12 @@ class BrandServiceTest {
         when(brandRepository.save(any(Brand.class))).thenReturn(brand);
 
         // when
-        Brand createdBrand = brandService.createBrand(request);
+        var response = brandService.createBrand(request);
 
         // then
         assertSoftly(it -> {
-            assertThat(createdBrand).isNotNull();
-            assertThat(createdBrand.getId()).isEqualTo(1L);
-            assertThat(createdBrand.getName()).isEqualTo("무신사 스탠다드");
+            assertThat(response).isNotNull();
+            assertThat(response.id()).isEqualTo(1L);
         });
         verify(brandRepository).findByName("무신사 스탠다드");
         verify(brandRepository).save(any(Brand.class));

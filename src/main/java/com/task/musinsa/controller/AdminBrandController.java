@@ -1,6 +1,7 @@
 package com.task.musinsa.controller;
 
 import com.task.musinsa.common.ApiResponse;
+import com.task.musinsa.dto.BrandResponseDto;
 import com.task.musinsa.dto.CreateBrandRequestDto;
 import com.task.musinsa.service.BrandService;
 import jakarta.validation.Valid;
@@ -20,17 +21,10 @@ public class AdminBrandController {
     private final BrandService brandService;
 
     @PostMapping
-    public ResponseEntity<BrandResponseDto> createBrand(@Valid @RequestBody CreateBrandRequestDto createBrandRequestDto) {
+    public ResponseEntity<ApiResponse<BrandResponseDto>> createBrand(@Valid @RequestBody CreateBrandRequestDto createBrandRequestDto) {
         var result = brandService.createBrand(createBrandRequestDto);
-        var responseDto = new BrandResponseDto(result.getId(), result.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(HttpStatus.CREATED.value(), "브랜드 생성 성공", result));
     }
-
-    record BrandResponseDto(
-            long id,
-            String name
-    ) {
-    }
-
 
 }
